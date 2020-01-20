@@ -64,7 +64,7 @@ class List extends React.Component {
                 {!this.state.openAddForm ? (
                     <span onClick={this.handleAddClick} className='add btn'><i className='fas fa-plus'></i></span>
                 ) : (
-                    <div className='menu'><Form addItem={this.handleAdditem} closeForm={this.handleCancel} /></div>
+                    <div className='menu'><Form addItem={this.handleAddItem} closeForm={this.handleCancel} /></div>
                 )}
             </>
         )

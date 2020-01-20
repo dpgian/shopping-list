@@ -11,18 +11,20 @@ export default function (state = initialState, action) {
         }
         case READ : return state
         case UPDATE : {
-            const updateItem = {...action.payload.item}
+            const updatedItem = {...action.payload.item}
             return {
                 listItems : [...state.listItems].map(item => {
-                    if(item.id === updateItem.id){
+                    if(item.id === updatedItem.id){
                         return updatedItem
                     } else return item
                 })
             }
         }
-        case DELETE : return { 
-            listItems : [...state.listItems].filter(item => item.id !== id)
-        }
+        case DELETE : 
+            const id = action.payload.id
+            return { 
+                listItems : [...state.listItems].filter(item => item.id !== id)
+            }
         default: return state
     }
 }

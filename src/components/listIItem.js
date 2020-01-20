@@ -21,9 +21,9 @@ class ListItem extends React.Component {
 
     handleUpdate = ({ name, amount }) => {
         const updatedItem = {
-            id: this.props.id, name, price
+            id: this.props.id, name, amount
         }
-        this.props.handleUpdate(updateItem)
+        this.props.handleUpdate(updatedItem)
         this.handleCancel()
     }
 
@@ -36,11 +36,11 @@ class ListItem extends React.Component {
             <>
             {
                 !this.state.openEditForm ? (
-                    <div className='list-row'>
+                    <div className='menu-row'>
                         <div className='list-item-name'>{this.state.name}</div>
                         <div className='list-item-amount'>{this.state.amount}</div>
                         <div className='operations'>
-                            <span onClick={this.handleEditClick} className='btn edit'><i className='fas fa-pen'></i></span>
+                            <span onClick={this.handleClick} className='btn edit'><i className='fas fa-trash'></i></span>
                             <span onClick={this.handleDelete} className='btn delete'><i className='fas fa-trash'></i></span>
                         </div>
                     </div>

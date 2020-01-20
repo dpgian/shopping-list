@@ -31911,10 +31911,10 @@ function (_React$Component) {
       var updatedItem = {
         id: _this.props.id,
         name: name,
-        price: price
+        amount: amount
       };
 
-      _this.props.handleUpdate(updateItem);
+      _this.props.handleUpdate(updatedItem);
 
       _this.handleCancel();
     });
@@ -31952,7 +31952,7 @@ function (_React$Component) {
     key: "render",
     value: function render() {
       return _react.default.createElement(_react.default.Fragment, null, !this.state.openEditForm ? _react.default.createElement("div", {
-        className: "list-row"
+        className: "menu-row"
       }, _react.default.createElement("div", {
         className: "list-item-name"
       }, this.state.name), _react.default.createElement("div", {
@@ -31960,10 +31960,10 @@ function (_React$Component) {
       }, this.state.amount), _react.default.createElement("div", {
         className: "operations"
       }, _react.default.createElement("span", {
-        onClick: this.handleEditClick,
+        onClick: this.handleClick,
         className: "btn edit"
       }, _react.default.createElement("i", {
-        className: "fas fa-pen"
+        className: "fas fa-trash"
       })), _react.default.createElement("span", {
         onClick: this.handleDelete,
         className: "btn delete"
@@ -35883,7 +35883,7 @@ function (_React$Component) {
       })) : _react.default.createElement("div", {
         className: "menu"
       }, _react.default.createElement(_form.default, {
-        addItem: this.handleAdditem,
+        addItem: this.handleAddItem,
         closeForm: this.handleCancel
       })));
     }
@@ -35977,11 +35977,11 @@ function _default() {
 
     case _actions.UPDATE:
       {
-        var _updateItem = _objectSpread({}, action.payload.item);
+        var updatedItem = _objectSpread({}, action.payload.item);
 
         return {
           listItems: _toConsumableArray(state.listItems).map(function (item) {
-            if (item.id === _updateItem.id) {
+            if (item.id === updatedItem.id) {
               return updatedItem;
             } else return item;
           })
@@ -35989,6 +35989,7 @@ function _default() {
       }
 
     case _actions.DELETE:
+      var id = action.payload.id;
       return {
         listItems: _toConsumableArray(state.listItems).filter(function (item) {
           return item.id !== id;
@@ -36173,7 +36174,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49908" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51657" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
