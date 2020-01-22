@@ -1,4 +1,4 @@
-import { CREATE, READ, UPDATE, DELETE, updateItem } from '../actions/actions'
+import { FETCH_ITEMS_BEGIN, FETCH_ITEMS_SUCCESS, FETCH_ITEMS_FAILURE, CREATE, READ, UPDATE, DELETE } from '../actions/actions'
 
 const initialState = {
     listItems : []
@@ -25,6 +25,22 @@ export default function (state = initialState, action) {
             return { 
                 listItems : [...state.listItems].filter(item => item.id !== id)
             }
+        case FETCH_ITEMS_BEGIN : return {
+            ...state,
+            loading: true,
+            errors: null
+        }
+        case FETCH_ITEMS_SUCCESS : return {
+            ...state,
+            loading: false,
+            listItems: action.payload.items
+        }
+        case FETCH_ITEMS_FAILURE: return {
+            ...state,
+            loading: false,
+            errors: action.payload.errors,
+            listItems: []
+        }
         default: return state
     }
 }

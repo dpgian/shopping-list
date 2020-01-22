@@ -3,8 +3,9 @@ import ListItem from './components/listIItem'
 import Form from './components/form'
 import './list.css'
 import { connect } from 'react-redux'
-import { createItem, deleteItem, updateItem } from './redux/actions/actions'
+import { createItem, deleteItem, updateItem, readItems} from './redux/actions/actions'
 import uuid from 'uuid'
+import axios from 'axios'
 
 class List extends React.Component {
     constructor(props) {
@@ -13,6 +14,10 @@ class List extends React.Component {
         this.state = {
             openAddForm : false
         }
+    }
+
+    componentDidMount() {
+        this.props.readItems()
     }
 
     handleAddClick = () => this.setState({ openAddForm: true })
@@ -25,17 +30,39 @@ class List extends React.Component {
             id: uuid.v4(),
             name, amount
         }
+
+        axios.post('/api/listItems', {...newItem })
+            .then(() => console.log('Item added.'))
+            .catch((err) => console.log('Error creating item, error: ' + err))
+
         this.props.createItem(newItem)
         this.handleCancel()
     }
 
-    handleDeleteItem = (id) => this.props.deleteItem(id)
+    handleDeleteItem = (id) => {
+        
+        axios.delete(`/api/listItems/${id}`)
+            .then(() => console.log('Item deleted.'))
+            .catch((err) => console.log('Error deleting item, error: ' + err))
 
-    handleUpdateItem = (item) => this.props.updateItem(item)
+        this.props.deleteItem(id)
+    }
+        
+
+    handleUpdateItem = (item) => {
+        
+        axios.put(`api/listItems/${item.id}`, {item})
+            .then(() => console.log('Item updated.'))
+            .catch((err) => console.log('Error updating item, error: '+ err))
+        
+        this.props.updateItem(item)
+    }
 
     handleCancel = () => this.setState({ openAddForm: false})
 
     render() {
+        const { loading, errors } = this.props
+
         return (
             <>
                 <h1><i className='fas fa-list-alt'></i>Shopping List</h1>
@@ -47,18 +74,31 @@ class List extends React.Component {
                         <div className='operations'>Operations</div>
                     </div>
 
-                    {this.props.listItems.length > 0 ? this.props.listItems.map((item, i) => {
-                        return <ListItem key={item.name + '-' + item.amount + '-' + item.id} id={item.id}
-                                    name={item.name} amount={item.amount}
-                                    handleDelete={this.handleDeleteItem}
-                                    handleUpdate={this.handleUpdateItem}
-                                    closeForm={this.handleCancel} />
-                    }) : (
-                        <div className='menu-row'>
-                            <div className='msg'>List is empty.</div>
-                        </div>
-                    )}
-
+                    {
+                        this.state.loading ? (
+                            <div className='menu-row'>
+                                <div className='msg'>Loading Items..</div>
+                            </div>
+                        ) : this.state.errors ? (
+                            <div className='menu-row'>
+                                <div className='err msg'>Error while loading items</div>
+                            </div>
+                        ) : (
+                            <>
+                                {this.props.listItems.length > 0 ? this.props.listItems.map((item, i) => {
+                                    return <ListItem key={item.name + '-' + item.amount + '-' + item.id} id={item.id}
+                                                name={item.name} amount={item.amount}
+                                                handleDelete={this.handleDeleteItem}
+                                                handleUpdate={this.handleUpdateItem}
+                                                closeForm={this.handleCancel} />
+                                }) : (
+                                    <div className='menu-row'>
+                                        <div className='msg'>List is empty.</div>
+                                    </div>
+                                )}
+                            </>
+                        )
+                    }
                 </div>
 
                 {!this.state.openAddForm ? (
@@ -71,8 +111,8 @@ class List extends React.Component {
     }
 }
 
-const mapStateToProps = ({ listItems }) => ({
-    listItems
+const mapStateToProps = ({ listItems, loading, errors }) => ({
+    listItems, loading, errors
 })
 
-export default connect(mapStateToProps, { createItem, deleteItem, updateItem })(List)
+export default connect(mapStateToProps, { createItem, deleteItem, updateItem, readItems })(List)
